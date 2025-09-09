@@ -108,13 +108,6 @@ const fileImport = $("#file-import");
 const ordemList = $("#ordem-list");
 const btnShuffle = $("#btn-shuffle");
 
-const themeSelect = $("#themeSelect");
-const btnShare = $("#btn-share");
-const btnNew = $("#btn-new");
-
-const sfxSpin = $("#sfx-spin");
-const sfxDing = $("#sfx-ding");
-
 /*******************
  * NAVEGAÇÃO       *
  *******************/
@@ -132,17 +125,6 @@ function showRoute(route){
   if(route==="historico"){ viewHistorico.classList.add("active"); renderHistorico(); }
   if(route==="opcoes"){ viewOpcoes.classList.add("active"); renderOpcoes(); }
 }
-// ===== Tema =====
-const THEME_KEY = "roleta_theme_v1";
-function applyTheme(theme){
-  document.body.classList.remove("theme-medieval","theme-neon");
-  if(theme === "medieval") document.body.classList.add("theme-medieval");
-  if(theme === "neon") document.body.classList.add("theme-neon");
-  localStorage.setItem(THEME_KEY, theme);
-  themeSelect.value = theme;
-}
-themeSelect.addEventListener("change", e => applyTheme(e.target.value));
-applyTheme(localStorage.getItem(THEME_KEY) || "default");
 
 /*******************
  * DESENHO DA ROLETA
@@ -227,30 +209,9 @@ function drawWheel(options){
  * ANIMAÇÃO SPIN   *
  *******************/
 function spinOnce(options, onEnd){
-  if (spinning) return;
+  if(spinning) return;
   spinning = true;
-  btnSpin.addEventListener("click", () => {
-  if (spinning) return;
-  const cat = CATEGORIAS[currentIndex];
-
-  // Som de giro (opcional)
-  try { if (typeof sfxSpin !== "undefined" && sfxSpin) { sfxSpin.currentTime = 0; sfxSpin.play(); } } catch {}
-
-  spinOnce(cat.options, (idx) => {
-    const val = cat.options[idx];
-    // SALVA o resultado
-    fichaAtual[cat.key] = val;
-    renderFicha();
-
-    // Som de parada (opcional)
-    try { if (typeof sfxDing !== "undefined" && sfxDing) { sfxDing.currentTime = 0; sfxDing.play(); } } catch {}
-
-    setTimeout(nextCategory, 650);
-  });
-});
-
-  // 🔊 SOM: iniciar som de giro
-  try { if (sfxSpin) { sfxSpin.currentTime = 0; sfxSpin.play(); } } catch {}
+  btnSpin.disabled = true;
 
   const n = options.length;
   const step = 360 / n;
@@ -268,49 +229,25 @@ function spinOnce(options, onEnd){
 
     drawWheel(options);
 
-    if (t >= dur) {
+    if(t >= dur){
       // ângulo final
       angle = (angle + total) % 360;
       drawWheel(options);
 
       // índice selecionado: pointer está no topo ( -90° )
       // ajuste: transformar ângulo para posição relativa ao topo
-      const pos = (angle + 90) % 360; // o que está sob o ponteiro
-      // índice “visual” (onde parou)
-const indexVisual = Math.floor((360 - pos) / step) % n;
+      const pos = (angle + 90) % 360;         // o que está sob o ponteiro
+      const index = Math.floor((360 - pos) / step) % n;
 
-// ===== Fallback seguro de pesos =====
-let index = indexVisual;
-try {
-  const cat = CATEGORIAS[currentIndex];
-  const pesosDaCat =
-    (typeof PESOS !== "undefined" && PESOS && PESOS[cat.key])
-      ? PESOS[cat.key]
-      : null;
-
-  const hasWeighted =
-    pesosDaCat &&
-    typeof weightedIndex === "function" &&
-    Array.isArray(cat.options);
-
-  if (hasWeighted) {
-    index = weightedIndex(cat.options, pesosDaCat);
+      spinning = false;
+      btnSpin.disabled = false;
+      onEnd(index);
+      return;
+    }
+    requestAnimationFrame(frame);
   }
-} catch (e) {
-  // Se der qualquer erro, usa o visual mesmo
-  index = indexVisual;
+  requestAnimationFrame(frame);
 }
-
-// 🔔 SOM: parar som de giro e tocar ding (se você adicionou os sons)
-try { if (typeof sfxSpin !== "undefined" && sfxSpin) { sfxSpin.pause(); sfxSpin.currentTime = 0; } } catch {}
-try { if (typeof sfxDing !== "undefined" && sfxDing) { sfxDing.currentTime = 0; sfxDing.play(); } } catch {}
-
-spinning = false;
-btnSpin.disabled = false;
-onEnd(index);
-return;
-
-
 
 /*******************
  * FICHA E FLUXO   *
@@ -460,30 +397,6 @@ btnReset.addEventListener("click", ()=>{
 });
 autoToggle.addEventListener("change", (e)=>{ autoMode = e.target.checked; });
 
-btnShare.addEventListener("click", async ()=>{
-  // se tiver um cartão final mostrando o último, usa ele; senão, usa fichaAtual
-  const base = Object.keys(fichaAtual).length ? fichaAtual : history[0];
-  if(!base){ alert("Gere um personagem primeiro."); return; }
-
-  const linhas = CATEGORIAS.map(c => `${c.key}: ${base[c.key] ?? "-"}`).join("\n");
-  const texto = `🎲 Meu Personagem:\n${linhas}\n— Gerado na Roleta Épica`;
-
-  if(navigator.share){
-    try{ await navigator.share({ title: "Roleta Épica", text: texto }); }
-    catch{}
-  } else {
-    await navigator.clipboard.writeText(texto);
-    alert("Ficha copiada! Cole onde quiser (WhatsApp, etc.)");
-  }
-});
-
-btnNew.addEventListener("click", ()=>{
-  if(spinning) return;
-  fichaAtual = {}; currentIndex = 0; startCategory();
-  finalCard.classList.add("hidden");
-  if(autoMode) setTimeout(()=>btnSpin.click(), 400);
-});
-
 /*******************
  * CONFETTI         *
  *******************/
@@ -528,10 +441,4 @@ function boot(){
   renderHistorico();
   renderOpcoes();
 }
-
 boot();
-
-
-
-
-
