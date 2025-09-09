@@ -227,9 +227,12 @@ function drawWheel(options){
  * ANIMAÇÃO SPIN   *
  *******************/
 function spinOnce(options, onEnd){
-  if(spinning) return;
+  if (spinning) return;
   spinning = true;
   btnSpin.disabled = true;
+
+  // 🔊 SOM: iniciar som de giro
+  try { if (sfxSpin) { sfxSpin.currentTime = 0; sfxSpin.play(); } } catch {}
 
   const n = options.length;
   const step = 360 / n;
@@ -247,25 +250,29 @@ function spinOnce(options, onEnd){
 
     drawWheel(options);
 
-    if(t >= dur){
+    if (t >= dur) {
       // ângulo final
       angle = (angle + total) % 360;
       drawWheel(options);
 
       // índice selecionado: pointer está no topo ( -90° )
       // ajuste: transformar ângulo para posição relativa ao topo
-      const pos = (angle + 90) % 360;         // o que está sob o ponteiro
-    // índice “visual” (onde parou)
+      const pos = (angle + 90) % 360; // o que está sob o ponteiro
+      // índice “visual” (onde parou)
       const indexVisual = Math.floor((360 - pos) / step) % n;
 
-// índice “real” com pesos (se houver)
-const cat = CATEGORIAS[currentIndex];
-const pesosDaCat = PESOS[cat.key];
-const indexPeso = pesosDaCat ? weightedIndex(cat.options, pesosDaCat) : indexVisual;
+      // índice “real” com pesos (se houver)
+      const cat = CATEGORIAS[currentIndex];
+      const pesosDaCat = PESOS[cat.key];
+      const indexPeso = pesosDaCat ? weightedIndex(cat.options, pesosDaCat) : indexVisual;
 
-// usamos o indexPeso como resultado final,
-// mas mantemos a animação visual como está (indexVisual)
-const index = indexPeso;
+      // usamos o indexPeso como resultado final,
+      // mas mantemos a animação visual como está (indexVisual)
+      const index = indexPeso;
+
+      // 🔔 SOM: parar som de giro e tocar ding
+      try { if (sfxSpin) { sfxSpin.pause(); sfxSpin.currentTime = 0; } } catch {}
+      try { if (sfxDing) { sfxDing.currentTime = 0; sfxDing.play(); } } catch {}
 
       spinning = false;
       btnSpin.disabled = false;
@@ -276,6 +283,7 @@ const index = indexPeso;
   }
   requestAnimationFrame(frame);
 }
+
 
 /*******************
  * FICHA E FLUXO   *
@@ -495,6 +503,7 @@ function boot(){
 }
 
 boot();
+
 
 
 
