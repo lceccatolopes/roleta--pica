@@ -229,7 +229,25 @@ function drawWheel(options){
 function spinOnce(options, onEnd){
   if (spinning) return;
   spinning = true;
-  btnSpin.disabled = true;
+  btnSpin.addEventListener("click", () => {
+  if (spinning) return;
+  const cat = CATEGORIAS[currentIndex];
+
+  // Som de giro (opcional)
+  try { if (typeof sfxSpin !== "undefined" && sfxSpin) { sfxSpin.currentTime = 0; sfxSpin.play(); } } catch {}
+
+  spinOnce(cat.options, (idx) => {
+    const val = cat.options[idx];
+    // SALVA o resultado
+    fichaAtual[cat.key] = val;
+    renderFicha();
+
+    // Som de parada (opcional)
+    try { if (typeof sfxDing !== "undefined" && sfxDing) { sfxDing.currentTime = 0; sfxDing.play(); } } catch {}
+
+    setTimeout(nextCategory, 650);
+  });
+});
 
   // 🔊 SOM: iniciar som de giro
   try { if (sfxSpin) { sfxSpin.currentTime = 0; sfxSpin.play(); } } catch {}
@@ -259,30 +277,39 @@ function spinOnce(options, onEnd){
       // ajuste: transformar ângulo para posição relativa ao topo
       const pos = (angle + 90) % 360; // o que está sob o ponteiro
       // índice “visual” (onde parou)
-      const indexVisual = Math.floor((360 - pos) / step) % n;
+const indexVisual = Math.floor((360 - pos) / step) % n;
 
-      // índice “real” com pesos (se houver)
-      const cat = CATEGORIAS[currentIndex];
-      const pesosDaCat = PESOS[cat.key];
-      const indexPeso = pesosDaCat ? weightedIndex(cat.options, pesosDaCat) : indexVisual;
+// ===== Fallback seguro de pesos =====
+let index = indexVisual;
+try {
+  const cat = CATEGORIAS[currentIndex];
+  const pesosDaCat =
+    (typeof PESOS !== "undefined" && PESOS && PESOS[cat.key])
+      ? PESOS[cat.key]
+      : null;
 
-      // usamos o indexPeso como resultado final,
-      // mas mantemos a animação visual como está (indexVisual)
-      const index = indexPeso;
+  const hasWeighted =
+    pesosDaCat &&
+    typeof weightedIndex === "function" &&
+    Array.isArray(cat.options);
 
-      // 🔔 SOM: parar som de giro e tocar ding
-      try { if (sfxSpin) { sfxSpin.pause(); sfxSpin.currentTime = 0; } } catch {}
-      try { if (sfxDing) { sfxDing.currentTime = 0; sfxDing.play(); } } catch {}
-
-      spinning = false;
-      btnSpin.disabled = false;
-      onEnd(index);
-      return;
-    }
-    requestAnimationFrame(frame);
+  if (hasWeighted) {
+    index = weightedIndex(cat.options, pesosDaCat);
   }
-  requestAnimationFrame(frame);
+} catch (e) {
+  // Se der qualquer erro, usa o visual mesmo
+  index = indexVisual;
 }
+
+// 🔔 SOM: parar som de giro e tocar ding (se você adicionou os sons)
+try { if (typeof sfxSpin !== "undefined" && sfxSpin) { sfxSpin.pause(); sfxSpin.currentTime = 0; } } catch {}
+try { if (typeof sfxDing !== "undefined" && sfxDing) { sfxDing.currentTime = 0; sfxDing.play(); } } catch {}
+
+spinning = false;
+btnSpin.disabled = false;
+onEnd(index);
+return;
+
 
 
 /*******************
@@ -503,6 +530,7 @@ function boot(){
 }
 
 boot();
+
 
 
 
