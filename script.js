@@ -108,6 +108,13 @@ const fileImport = $("#file-import");
 const ordemList = $("#ordem-list");
 const btnShuffle = $("#btn-shuffle");
 
+const themeSelect = $("#themeSelect");
+const btnShare = $("#btn-share");
+const btnNew = $("#btn-new");
+
+const sfxSpin = $("#sfx-spin");
+const sfxDing = $("#sfx-ding");
+
 /*******************
  * NAVEGAÇÃO       *
  *******************/
@@ -125,6 +132,17 @@ function showRoute(route){
   if(route==="historico"){ viewHistorico.classList.add("active"); renderHistorico(); }
   if(route==="opcoes"){ viewOpcoes.classList.add("active"); renderOpcoes(); }
 }
+// ===== Tema =====
+const THEME_KEY = "roleta_theme_v1";
+function applyTheme(theme){
+  document.body.classList.remove("theme-medieval","theme-neon");
+  if(theme === "medieval") document.body.classList.add("theme-medieval");
+  if(theme === "neon") document.body.classList.add("theme-neon");
+  localStorage.setItem(THEME_KEY, theme);
+  themeSelect.value = theme;
+}
+themeSelect.addEventListener("change", e => applyTheme(e.target.value));
+applyTheme(localStorage.getItem(THEME_KEY) || "default");
 
 /*******************
  * DESENHO DA ROLETA
@@ -237,7 +255,17 @@ function spinOnce(options, onEnd){
       // índice selecionado: pointer está no topo ( -90° )
       // ajuste: transformar ângulo para posição relativa ao topo
       const pos = (angle + 90) % 360;         // o que está sob o ponteiro
-      const index = Math.floor((360 - pos) / step) % n;
+    // índice “visual” (onde parou)
+      const indexVisual = Math.floor((360 - pos) / step) % n;
+
+// índice “real” com pesos (se houver)
+const cat = CATEGORIAS[currentIndex];
+const pesosDaCat = PESOS[cat.key];
+const indexPeso = pesosDaCat ? weightedIndex(cat.options, pesosDaCat) : indexVisual;
+
+// usamos o indexPeso como resultado final,
+// mas mantemos a animação visual como está (indexVisual)
+const index = indexPeso;
 
       spinning = false;
       btnSpin.disabled = false;
@@ -397,6 +425,30 @@ btnReset.addEventListener("click", ()=>{
 });
 autoToggle.addEventListener("change", (e)=>{ autoMode = e.target.checked; });
 
+btnShare.addEventListener("click", async ()=>{
+  // se tiver um cartão final mostrando o último, usa ele; senão, usa fichaAtual
+  const base = Object.keys(fichaAtual).length ? fichaAtual : history[0];
+  if(!base){ alert("Gere um personagem primeiro."); return; }
+
+  const linhas = CATEGORIAS.map(c => `${c.key}: ${base[c.key] ?? "-"}`).join("\n");
+  const texto = `🎲 Meu Personagem:\n${linhas}\n— Gerado na Roleta Épica`;
+
+  if(navigator.share){
+    try{ await navigator.share({ title: "Roleta Épica", text: texto }); }
+    catch{}
+  } else {
+    await navigator.clipboard.writeText(texto);
+    alert("Ficha copiada! Cole onde quiser (WhatsApp, etc.)");
+  }
+});
+
+btnNew.addEventListener("click", ()=>{
+  if(spinning) return;
+  fichaAtual = {}; currentIndex = 0; startCategory();
+  finalCard.classList.add("hidden");
+  if(autoMode) setTimeout(()=>btnSpin.click(), 400);
+});
+
 /*******************
  * CONFETTI         *
  *******************/
@@ -443,5 +495,6 @@ function boot(){
 }
 
 boot();
+
 
 
