@@ -14,7 +14,7 @@ const STORAGE_KEY = "hist_personagens_v1";
  ****************/
 // 50 raças
 const RACAS = [
-"Humano","Elfo da Floresta","Elfo Sombrio","Anão","Orc","Goblin","Troll","Gigante","Fada","Ninfa",
+"Humano", "Elfo da Floresta", "Elfo Sombrio", "Anão", "Orc", "Goblin", "Troll", "Gigante", "Fada", "Ninfa",
 "Sereiano","Dragão-humano","Demônio","Anjo","Vampiro","Lobisomem","Elemental de Fogo","Elemental de Água","Elemental de Terra","Elemental de Ar",
 "Golem","Súcubo/Íncubo","Meio-Dragão","Meio-Demônio","Meio-Anjo","Centauro","Minotauro","Kitsune","Tengu","Espírito Antigo",
 "Fantasma","Zumbi Consciente","Planta-Humana","Ciborgue","Autômato","Alienígena","Súcubo Dracônico","Fênix-Humana","Tritão do Abismo","Salamandra",
@@ -71,14 +71,15 @@ let CATEGORIAS = [
   { key: "Escala de Poder", options: ESCALA_PODER },
 ];
 
+
 /*******************
  * ESTADO DA APP   *
  *******************/
-let history = loadHistory();      // personagens salvos
-let currentIndex = 0;             // índice da categoria atual
-let fichaAtual = {};              // ficha em construção
-let spinning = false;             // está girando?
-let autoMode = false;             // gira sequência sozinho?
+let history = loadHistory();
+let currentIndex = 0;
+let fichaAtual = {};
+let spinning = false;
+let autoMode = false;
 
 /*******************
  * ELEMENTOS       *
@@ -93,6 +94,7 @@ const fichaList = $("#ficha-list");
 const finalCard = $("#final-card");
 const btnSpin = $("#btn-spin");
 const btnReset = $("#btn-reset");
+const btnNew = $("#btn-new"); // <--- NOVO BOTÃO
 const autoToggle = $("#autoToggle");
 
 const tabButtons = $$(".tab");
@@ -129,7 +131,7 @@ function showRoute(route){
 /*******************
  * DESENHO DA ROLETA
  *******************/
-let angle = 0; // ângulo atual (graus)
+let angle = 0;
 function drawWheel(options){
   const size = wheel.width;
   const cx = size/2, cy = size/2;
@@ -138,10 +140,8 @@ function drawWheel(options){
   const n = options.length;
   const step = 360 / n;
 
-  // fundo
   wctx.clearRect(0,0,size,size);
 
-  // glow externo
   const grd = wctx.createRadialGradient(cx, cy, inner, cx, cy, outer);
   grd.addColorStop(0, "#0f1c3b");
   grd.addColorStop(1, "#0a1227");
@@ -150,7 +150,6 @@ function drawWheel(options){
   wctx.arc(cx, cy, outer, 0, Math.PI*2);
   wctx.fill();
 
-  // setores
   for(let i=0;i<n;i++){
     const start = (angle + i*step) * Math.PI/180;
     const end   = (angle + (i+1)*step) * Math.PI/180;
@@ -166,7 +165,6 @@ function drawWheel(options){
     wctx.strokeStyle = "#0b1020";
     wctx.stroke();
 
-    // texto
     const mid = (start + end)/2;
     const tx = cx + Math.cos(mid) * (outer - 50);
     const ty = cy + Math.sin(mid) * (outer - 50);
@@ -182,14 +180,12 @@ function drawWheel(options){
     wctx.restore();
   }
 
-  // aro
   wctx.beginPath();
   wctx.arc(cx, cy, outer, 0, Math.PI*2);
   wctx.lineWidth = 6;
   wctx.strokeStyle = "#0d1530";
   wctx.stroke();
 
-  // miolo
   const radial = wctx.createRadialGradient(cx, cy, 0, cx, cy, inner);
   radial.addColorStop(0, "#ffd54a");
   radial.addColorStop(1, "#a970ff");
@@ -198,7 +194,6 @@ function drawWheel(options){
   wctx.fillStyle = radial;
   wctx.fill();
 
-  // brilho no miolo
   wctx.beginPath();
   wctx.arc(cx-12, cy-12, 10, 0, Math.PI*2);
   wctx.fillStyle = "#ffffff99";
@@ -215,8 +210,6 @@ function spinOnce(options, onEnd){
 
   const n = options.length;
   const step = 360 / n;
-
-  // rotação total entre 3 e 6 voltas + deslocamento aleatório
   const total = rand(3,6)*360 + rand(0,359);
   const startTime = performance.now();
   const dur = rand(1800, 2600);
@@ -224,19 +217,15 @@ function spinOnce(options, onEnd){
   function frame(now){
     const t = clamp(now - startTime, 0, dur);
     const eased = easeOutCubic(t, 0, total, dur);
-    // atualiza ângulo (não deixa crescer infinito)
     angle = (angle + (eased - (angle % 360))) % 360;
 
     drawWheel(options);
 
     if(t >= dur){
-      // ângulo final
       angle = (angle + total) % 360;
       drawWheel(options);
 
-      // índice selecionado: pointer está no topo ( -90° )
-      // ajuste: transformar ângulo para posição relativa ao topo
-      const pos = (angle + 90) % 360;         // o que está sob o ponteiro
+      const pos = (angle + 90) % 360;
       const index = Math.floor((360 - pos) / step) % n;
 
       spinning = false;
@@ -279,11 +268,9 @@ function nextCategory(){
     startCategory();
     if(autoMode) setTimeout(()=>btnSpin.click(), 500);
   } else {
-    // terminou personagem
     showFinalCard();
     saveToHistory({ ...fichaAtual, __createdAt: Date.now() });
     fireConfetti();
-    // prepara próxima rodada
     fichaAtual = {};
     currentIndex = 0;
     startCategory();
@@ -371,7 +358,6 @@ btnShuffle.addEventListener("click", ()=>{
     [CATEGORIAS[i], CATEGORIAS[j]] = [CATEGORIAS[j], CATEGORIAS[i]];
   }
   renderOpcoes();
-  // se estiver na roleta, recomeça a sequência
   if(viewRoleta.classList.contains("active")){
     currentIndex = 0; fichaAtual = {}; startCategory();
   }
@@ -395,6 +381,16 @@ btnReset.addEventListener("click", ()=>{
   fichaAtual = {}; currentIndex = 0; startCategory();
   finalCard.classList.add("hidden");
 });
+
+// <<< NOVO BOTÃO >>>
+btnNew.addEventListener("click", () => {
+  if (spinning) return;
+  fichaAtual = {};
+  currentIndex = 0;
+  finalCard.classList.add("hidden");
+  startCategory();
+});
+
 autoToggle.addEventListener("change", (e)=>{ autoMode = e.target.checked; });
 
 /*******************
@@ -433,11 +429,8 @@ function fireConfetti(){
  * BOOT            *
  *******************/
 function boot(){
-  // rota inicial
   showRoute("roleta");
-  // inicializa roleta
   startCategory();
-  // primeira render do histórico/ops para já existir estrutura ao trocar
   renderHistorico();
   renderOpcoes();
 }
