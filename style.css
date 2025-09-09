@@ -111,3 +111,11 @@ h2,h3{margin:0 0 10px 0}
 .footer{opacity:.65; text-align:center; padding:22px; border-top:1px solid var(--border); margin-top:14px}
 
 .confetti{position:fixed; inset:0; pointer-events:none}
+
+.btn.info {
+  background: #38bdf8;
+  color: #0b1020;
+}
+.btn.info:hover {
+  background: #0ea5e9;
+}
