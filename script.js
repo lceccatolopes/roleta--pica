@@ -441,4 +441,105 @@ function boot(){
   renderHistorico();
   renderOpcoes();
 }
+/*******************
+ * MODO TORNEIO    *
+ *******************/
+
+// Número de participantes (tem que ser 4, 8, 16...)
+const TOURNAMENT_SIZE = 8;
+
+// Função para gerar um personagem aleatório
+function generateCharacter() {
+  const char = {};
+  CATEGORIAS.forEach(c => {
+    const opt = c.options[rand(0, c.options.length - 1)];
+    char[c.key] = opt;
+  });
+  char.__createdAt = Date.now();
+  return char;
+}
+
+// Inicia o torneio
+function startTournament() {
+  // Gera os participantes
+  let participants = Array.from({ length: TOURNAMENT_SIZE }, generateCharacter);
+
+  // Mostra bracket inicial
+  renderBracket(participants);
+
+  // Joga as rodadas
+  setTimeout(() => playRound(participants), 800);
+}
+
+// Simula uma rodada
+function playRound(participants) {
+  const winners = [];
+  for (let i = 0; i < participants.length; i += 2) {
+    const p1 = participants[i];
+    const p2 = participants[i + 1];
+
+    // Sorteia vencedor (no futuro pode usar Escala de Poder)
+    const winner = Math.random() < 0.5 ? p1 : p2;
+    winners.push(winner);
+  }
+
+  // Atualiza bracket
+  renderBracket(winners);
+
+  if (winners.length > 1) {
+    // Próxima rodada
+    setTimeout(() => playRound(winners), 1000);
+  } else {
+    // Final: mostra campeão
+    setTimeout(() => showTournamentWinner(winners[0]), 1200);
+  }
+}
+
+// Renderiza o bracket na tela
+function renderBracket(participants) {
+  const container = document.getElementById("tournament");
+  if (!container) return;
+
+  container.innerHTML = "<h3>🏆 Torneio</h3>";
+  participants.forEach((p, i) => {
+    const div = document.createElement("div");
+    div.className = "t-player";
+    div.innerHTML = `<strong>${p["Raça"]}</strong> - ${p["Poder"]}`;
+    container.appendChild(div);
+
+    if (i % 2 === 1) {
+      const hr = document.createElement("hr");
+      container.appendChild(hr);
+    }
+  });
+}
+
+// Mostra o campeão final
+function showTournamentWinner(champion) {
+  const container = document.getElementById("tournament");
+  if (!container) return;
+
+  container.innerHTML = `
+    <h3>🏆 CAMPEÃO DO TORNEIO 🏆</h3>
+    <p><strong>${champion["Raça"]}</strong> com o poder <em>${champion["Poder"]}</em> venceu!</p>
+  `;
+
+  // Salva no histórico
+  saveToHistory(champion);
+
+  // Confete pra comemorar
+  fireConfetti();
+}
+
+/*******************
+ * BOTÃO TORNEIO    *
+ *******************/
+const btnTournament = document.getElementById("btn-tournament");
+if (btnTournament) {
+  btnTournament.addEventListener("click", () => {
+    startTournament();
+  });
+}
+
 boot();
+
