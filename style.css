@@ -111,28 +111,3 @@ h2,h3{margin:0 0 10px 0}
 .footer{opacity:.65; text-align:center; padding:22px; border-top:1px solid var(--border); margin-top:14px}
 
 .confetti{position:fixed; inset:0; pointer-events:none}
-
-/* ===== Temas ===== */
-.theme-select {
-  background: var(--panel2);
-  color: var(--text);
-  border: 1px solid var(--border);
-  padding: 8px 12px;
-  border-radius: 10px;
-}
-
-body.theme-medieval {
-  background: radial-gradient(1200px 800px at 50% -10%, #2b1f12 0%, #1a130b 40%, #100b06 100%);
-}
-body.theme-medieval .panel { background: linear-gradient(180deg, #2b1f12, #21170d); }
-body.theme-medieval .pointer { border-bottom-color: #d4a373; }
-body.theme-medieval .btn.primary { background: #d4a373; }
-body.theme-medieval .logo { background: conic-gradient(from 160deg, #d4a373, #8b5cf6, #22c55e, #d4a373); }
-
-body.theme-neon {
-  background: radial-gradient(1200px 800px at 50% -10%, #0a0a14 0%, #02020a 40%, #000000 100%);
-}
-body.theme-neon .panel { background: linear-gradient(180deg, #0b0b1c, #060612); border-color:#222; }
-body.theme-neon .pointer { border-bottom-color: #00e5ff; filter: drop-shadow(0 0 12px #00e5ff); }
-body.theme-neon .btn.primary { background: #00e5ff; color:#001015; }
-body.theme-neon .logo { background: conic-gradient(from 160deg, #00e5ff, #ff00e5, #00ffa8, #00e5ff); box-shadow:0 0 20px #00e5ff88 inset, 0 0 35px #ff00e550; }
