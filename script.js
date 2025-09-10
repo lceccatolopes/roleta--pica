@@ -12,52 +12,17 @@ const STORAGE_KEY = "hist_personagens_v1";
 /****************
  * DADOS GRANDES *
  ****************/
-// 50 raças
-const RACAS = [
-"Humano","Elfo da Floresta","Elfo Sombrio","Anão","Orc","Goblin","Troll","Gigante","Fada","Ninfa",
-"Sereiano","Dragão-humano","Demônio","Anjo","Vampiro","Lobisomem","Elemental de Fogo","Elemental de Água","Elemental de Terra","Elemental de Ar",
-"Golem","Súcubo/Íncubo","Meio-Dragão","Meio-Demônio","Meio-Anjo","Centauro","Minotauro","Kitsune","Tengu","Espírito Antigo",
-"Fantasma","Zumbi Consciente","Planta-Humana","Ciborgue","Autômato","Alienígena","Súcubo Dracônico","Fênix-Humana","Tritão do Abismo","Salamandra",
-"Krakenídeo","Serpente-Humana","Licantropo Felino","Dragão Ancião","Arcanista Élfico","Feyndar","Homúnculo","Necromante Vivo","Espírito Guardião","Ser Celestial"
-];
-
-// 50 poderes
-const PODERES = [
-"Manipulação de Fogo","Manipulação de Água","Manipulação de Terra","Manipulação de Ar","Controle de Gelo","Controle de Raios","Telecinese","Telepatia","Controle de Sombras","Manipulação de Luz",
-"Invocação de Criaturas","Necromancia","Magia de Sangue","Transmutação","Magia de Cura","Criação de Portais","Ilusionismo","Invisibilidade","Manipulação de Gravidade","Magia de Tempo",
-"Explosões de Energia","Super Força","Super Velocidade","Magia da Natureza","Controle de Metais","Controle de Veneno","Armas Místicas Infinitas","Manipulação de Ossos","Magia Musical","Controle de Emoções",
-"Aura de Medo","Magia de Cristais","Invocação de Armas","Magia de Runas","Energia Espiritual","Magia de Sonhos","Magia de Realidade","Regeneração Avançada","Magia de Caos","Controle de Som",
-"Magia Celestial","Magia Infernal","Controle de Areia","Fúria Bestial","Cópia de Poderes","Barreira Absoluta","Armadura Viva","Magia Lunar","Magia Solar","Expansão de Domínio"
-];
-
-// 20 origens
-const ORIGENS = [
-"Vilarejo simples","Reino poderoso","Cidade capital","Ruínas antigas","Floresta mística","Deserto amaldiçoado","Ilhas flutuantes","Submundo demoníaco","Céu celestial","Outro planeta",
-"Outro universo","Tribo bárbara","Academia mágica","Castelo ancestral","Montanhas congeladas","Vulcão ativo","Selva hostil","Cidade subterrânea","Caverna cristalina","Laboratório secreto"
-];
-
-// 20 personalidades
-const PERSONALIDADES = [
-"Corajoso","Covarde","Gentil","Cruel","Sarcástico","Misterioso","Sábio","Brincalhão","Sério","Impulsivo",
-"Estrategista","Paciente","Agressivo","Carismático","Sombrio","Protetor","Manipulador","Obcecado","Tranquilo","Louco"
-];
-
-// 15 motivações
-const MOTIVACOES = [
-"Vingança","Riqueza","Glória","Sobrevivência","Amor","Justiça","Poder absoluto","Exploração","Paz mundial","Caos absoluto",
-"Liberdade","Conhecimento","Fé","Herança familiar","Redenção"
-];
-
-// 10 escalas
+const RACAS = ["Humano","Elfo da Floresta","Elfo Sombrio","Anão","Orc","Goblin","Troll","Gigante","Fada","Ninfa","Sereiano","Dragão-humano","Demônio","Anjo","Vampiro","Lobisomem","Elemental de Fogo","Elemental de Água","Elemental de Terra","Elemental de Ar","Golem","Súcubo/Íncubo","Meio-Dragão","Meio-Demônio","Meio-Anjo","Centauro","Minotauro","Kitsune","Tengu","Espírito Antigo","Fantasma","Zumbi Consciente","Planta-Humana","Ciborgue","Autômato","Alienígena","Súcubo Dracônico","Fênix-Humana","Tritão do Abismo","Salamandra","Krakenídeo","Serpente-Humana","Licantropo Felino","Dragão Ancião","Arcanista Élfico","Feyndar","Homúnculo","Necromante Vivo","Espírito Guardião","Ser Celestial"];
+const PODERES = ["Manipulação de Fogo","Manipulação de Água","Manipulação de Terra","Manipulação de Ar","Controle de Gelo","Controle de Raios","Telecinese","Telepatia","Controle de Sombras","Manipulação de Luz","Invocação de Criaturas","Necromancia","Magia de Sangue","Transmutação","Magia de Cura","Criação de Portais","Ilusionismo","Invisibilidade","Manipulação de Gravidade","Magia de Tempo","Explosões de Energia","Super Força","Super Velocidade","Magia da Natureza","Controle de Metais","Controle de Veneno","Armas Místicas Infinitas","Manipulação de Ossos","Magia Musical","Controle de Emoções","Aura de Medo","Magia de Cristais","Invocação de Armas","Magia de Runas","Energia Espiritual","Magia de Sonhos","Magia de Realidade","Regeneração Avançada","Magia de Caos","Controle de Som","Magia Celestial","Magia Infernal","Controle de Areia","Fúria Bestial","Cópia de Poderes","Barreira Absoluta","Armadura Viva","Magia Lunar","Magia Solar","Expansão de Domínio"];
+const ORIGENS = ["Vilarejo simples","Reino poderoso","Cidade capital","Ruínas antigas","Floresta mística","Deserto amaldiçoado","Ilhas flutuantes","Submundo demoníaco","Céu celestial","Outro planeta","Outro universo","Tribo bárbara","Academia mágica","Castelo ancestral","Montanhas congeladas","Vulcão ativo","Selva hostil","Cidade subterrânea","Caverna cristalina","Laboratório secreto"];
+const PERSONALIDADES = ["Corajoso","Covarde","Gentil","Cruel","Sarcástico","Misterioso","Sábio","Brincalhão","Sério","Impulsivo","Estrategista","Paciente","Agressivo","Carismático","Sombrio","Protetor","Manipulador","Obcecado","Tranquilo","Louco"];
+const MOTIVACOES = ["Vingança","Riqueza","Glória","Sobrevivência","Amor","Justiça","Poder absoluto","Exploração","Paz mundial","Caos absoluto","Liberdade","Conhecimento","Fé","Herança familiar","Redenção"];
 const ESCALA_PODER = ["Civil","Soldado","Elite","Mestre","Herói","Lenda","Ancestral","Semideus","Divino","Cósmico"];
-
-// demais categorias
 const ALTURAS = ["Baixo","Médio","Alto","Gigante","Colossal"];
 const DURABILIDADES = ["Frágil","Resistente","Muito resistente","Tanque","Quase indestrutível"];
 const FORCAS = ["Muito fraco","Normal","Forte","Muito forte","Sobre-humano","Titânico"];
 const VELOCIDADES = ["Lento","Normal","Rápido","Muito rápido","Relâmpago"];
 
-// ordem padrão (pode embaralhar em Opções)
 let CATEGORIAS = [
   { key: "Raça", options: RACAS },
   { key: "Altura", options: ALTURAS },
@@ -74,17 +39,17 @@ let CATEGORIAS = [
 /*******************
  * ESTADO DA APP   *
  *******************/
-let history = loadHistory();      // personagens salvos
-let currentIndex = 0;             // índice da categoria atual
-let fichaAtual = {};              // ficha em construção
-let spinning = false;             // está girando?
-let autoMode = false;             // gira sequência sozinho?
+let history = loadHistory();
+let currentIndex = 0;
+let fichaAtual = {};
+let spinning = false;
+let autoMode = false;
 
 /*******************
  * ELEMENTOS       *
  *******************/
 const wheel = $("#wheel");
-const wctx  = wheel.getContext("2d");
+const wctx = wheel.getContext("2d");
 const confettiCanvas = $("#confetti");
 const cctx = confettiCanvas.getContext("2d");
 
@@ -99,6 +64,7 @@ const tabButtons = $$(".tab");
 const viewRoleta = $("#view-roleta");
 const viewHistorico = $("#view-historico");
 const viewOpcoes = $("#view-opcoes");
+const viewTorneio = $("#view-torneio");
 
 const histGrid = $("#hist-grid");
 const btnExport = $("#btn-export");
@@ -107,6 +73,11 @@ const fileImport = $("#file-import");
 
 const ordemList = $("#ordem-list");
 const btnShuffle = $("#btn-shuffle");
+
+const btnGenerateTournament = $("#btn-generate-tournament");
+const btnNextMatch = $("#btn-next-match");
+const bracketDiv = $("#tournament-bracket");
+const resultDiv = $("#tournament-result");
 
 /*******************
  * NAVEGAÇÃO       *
@@ -119,427 +90,147 @@ tabButtons.forEach(btn=>{
     showRoute(route);
   });
 });
+
 function showRoute(route){
-  [viewRoleta, viewHistorico, viewOpcoes].forEach(v=>v.classList.remove("active"));
-  if(route==="roleta"){ viewRoleta.classList.add("active"); }
+  [viewRoleta, viewHistorico, viewOpcoes, viewTorneio].forEach(v=>v?.classList.remove("active"));
+  if(route==="roleta") viewRoleta.classList.add("active");
+  if(route==="torneio") viewTorneio.classList.add("active");
   if(route==="historico"){ viewHistorico.classList.add("active"); renderHistorico(); }
   if(route==="opcoes"){ viewOpcoes.classList.add("active"); renderOpcoes(); }
 }
 
 /*******************
- * DESENHO DA ROLETA
+ * HISTÓRICO        *
  *******************/
-let angle = 0; // ângulo atual (graus)
-function drawWheel(options){
-  const size = wheel.width;
-  const cx = size/2, cy = size/2;
-  const outer = size/2 - 10;
-  const inner = 60;
-  const n = options.length;
-  const step = 360 / n;
-
-  // fundo
-  wctx.clearRect(0,0,size,size);
-
-  // glow externo
-  const grd = wctx.createRadialGradient(cx, cy, inner, cx, cy, outer);
-  grd.addColorStop(0, "#0f1c3b");
-  grd.addColorStop(1, "#0a1227");
-  wctx.fillStyle = grd;
-  wctx.beginPath();
-  wctx.arc(cx, cy, outer, 0, Math.PI*2);
-  wctx.fill();
-
-  // setores
-  for(let i=0;i<n;i++){
-    const start = (angle + i*step) * Math.PI/180;
-    const end   = (angle + (i+1)*step) * Math.PI/180;
-
-    wctx.beginPath();
-    wctx.moveTo(cx, cy);
-    wctx.arc(cx, cy, outer, start, end);
-    wctx.closePath();
-
-    wctx.fillStyle = i%2===0 ? "#7c3aed" : "#22c55e";
-    wctx.fill();
-    wctx.lineWidth = 2;
-    wctx.strokeStyle = "#0b1020";
-    wctx.stroke();
-
-    // texto
-    const mid = (start + end)/2;
-    const tx = cx + Math.cos(mid) * (outer - 50);
-    const ty = cy + Math.sin(mid) * (outer - 50);
-    const label = options[i];
-
-    wctx.save();
-    wctx.translate(tx, ty);
-    wctx.rotate(mid);
-    wctx.fillStyle = "#0b1020";
-    wctx.font = "14px sans-serif";
-    const tw = wctx.measureText(label).width;
-    wctx.fillText(label, -tw/2, 4);
-    wctx.restore();
+function loadHistory(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [] }catch{return []} }
+function saveHistory(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(history)); }
+function saveToHistory(char){ history = [char, ...history]; saveHistory(); }
+function renderHistorico(){
+  histGrid.innerHTML = "";
+  if(history.length===0){
+    histGrid.innerHTML = `<p class="hint">Nenhum personagem salvo ainda.</p>`;
+    return;
   }
-
-  // aro
-  wctx.beginPath();
-  wctx.arc(cx, cy, outer, 0, Math.PI*2);
-  wctx.lineWidth = 6;
-  wctx.strokeStyle = "#0d1530";
-  wctx.stroke();
-
-  // miolo
-  const radial = wctx.createRadialGradient(cx, cy, 0, cx, cy, inner);
-  radial.addColorStop(0, "#ffd54a");
-  radial.addColorStop(1, "#a970ff");
-  wctx.beginPath();
-  wctx.arc(cx, cy, inner, 0, Math.PI*2);
-  wctx.fillStyle = radial;
-  wctx.fill();
-
-  // brilho no miolo
-  wctx.beginPath();
-  wctx.arc(cx-12, cy-12, 10, 0, Math.PI*2);
-  wctx.fillStyle = "#ffffff99";
-  wctx.fill();
+  history.forEach((char,i)=>{
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `<h4>${char.__tournament ? "Campeão do Torneio" : "Personagem"} #${history.length-i}</h4>
+      <time>${new Date(char.__createdAt).toLocaleString()}</time>
+      <ul>${Object.entries(char).filter(([k])=>!k.startsWith("__")).map(([k,v])=>`<li><strong>${k}:</strong> ${v}</li>`).join("")}</ul>`;
+    histGrid.appendChild(card);
+  });
 }
 
 /*******************
- * ANIMAÇÃO SPIN   *
+ * ROLETA NORMAL    *
  *******************/
-function spinOnce(options, onEnd){
-  if(spinning) return;
-  spinning = true;
-  btnSpin.disabled = true;
+function drawWheel(options){
+  const size = wheel.width, cx = size/2, cy = size/2, outer = size/2-10, inner = 60, n = options.length, step = 360/n;
+  wctx.clearRect(0,0,size,size);
+  const grd = wctx.createRadialGradient(cx,cy,inner,cx,cy,outer); grd.addColorStop(0,"#0f1c3b"); grd.addColorStop(1,"#0a1227");
+  wctx.fillStyle=grd; wctx.beginPath(); wctx.arc(cx,cy,outer,0,Math.PI*2); wctx.fill();
+  for(let i=0;i<n;i++){
+    const start=(angle+i*step)*Math.PI/180, end=(angle+(i+1)*step)*Math.PI/180;
+    wctx.beginPath(); wctx.moveTo(cx,cy); wctx.arc(cx,cy,outer,start,end); wctx.closePath();
+    wctx.fillStyle=i%2===0?"#7c3aed":"#22c55e"; wctx.fill(); wctx.lineWidth=2; wctx.strokeStyle="#0b1020"; wctx.stroke();
+    const mid=(start+end)/2, tx=cx+Math.cos(mid)*(outer-50), ty=cy+Math.sin(mid)*(outer-50);
+    wctx.save(); wctx.translate(tx,ty); wctx.rotate(mid); wctx.fillStyle="#0b1020"; wctx.font="14px sans-serif";
+    const tw=wctx.measureText(options[i]).width; wctx.fillText(options[i],-tw/2,4); wctx.restore();
+  }
+  wctx.beginPath(); wctx.arc(cx,cy,outer,0,Math.PI*2); wctx.lineWidth=6; wctx.strokeStyle="#0d1530"; wctx.stroke();
+  const radial=wctx.createRadialGradient(cx,cy,0,cx,cy,inner); radial.addColorStop(0,"#ffd54a"); radial.addColorStop(1,"#a970ff");
+  wctx.beginPath(); wctx.arc(cx,cy,inner,0,Math.PI*2); wctx.fillStyle=radial; wctx.fill();
+}
 
-  const n = options.length;
-  const step = 360 / n;
-
-  // rotação total entre 3 e 6 voltas + deslocamento aleatório
-  const total = rand(3,6)*360 + rand(0,359);
-  const startTime = performance.now();
-  const dur = rand(1800, 2600);
-
+let angle=0;
+function spinOnce(options,onEnd){
+  if(spinning) return; spinning=true; btnSpin.disabled=true;
+  const n=options.length, step=360/n, total=rand(3,6)*360+rand(0,359), startTime=performance.now(), dur=rand(1800,2600);
   function frame(now){
-    const t = clamp(now - startTime, 0, dur);
-    const eased = easeOutCubic(t, 0, total, dur);
-    // atualiza ângulo (não deixa crescer infinito)
-    angle = (angle + (eased - (angle % 360))) % 360;
-
-    drawWheel(options);
-
-    if(t >= dur){
-      // ângulo final
-      angle = (angle + total) % 360;
-      drawWheel(options);
-
-      // índice selecionado: pointer está no topo ( -90° )
-      // ajuste: transformar ângulo para posição relativa ao topo
-      const pos = (angle + 90) % 360;         // o que está sob o ponteiro
-      const index = Math.floor((360 - pos) / step) % n;
-
-      spinning = false;
-      btnSpin.disabled = false;
-      onEnd(index);
-      return;
-    }
+    const t=clamp(now-startTime,0,dur), eased=easeOutCubic(t,0,total,dur);
+    angle=(angle+(eased-(angle%360)))%360; drawWheel(options);
+    if(t>=dur){ angle=(angle+total)%360; drawWheel(options);
+      const pos=(angle+90)%360, index=Math.floor((360-pos)/step)%n; spinning=false; btnSpin.disabled=false; onEnd(index); return;}
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
 }
 
-/*******************
- * FICHA E FLUXO   *
- *******************/
 function renderFicha(){
-  fichaList.innerHTML = "";
-  CATEGORIAS.forEach((cat, i)=>{
-    const li = document.createElement("li");
-    if(i===currentIndex) li.classList.add("live");
-    const left = document.createElement("span"); left.textContent = cat.key;
-    const right = document.createElement("span");
-    right.textContent = fichaAtual[cat.key] ?? (i<currentIndex ? "—" : "…");
-    li.append(left,right);
-    fichaList.appendChild(li);
-  });
+  fichaList.innerHTML=""; CATEGORIAS.forEach((c,i)=>{const li=document.createElement("li"); if(i===currentIndex) li.classList.add("live");
+    li.innerHTML=`<span>${c.key}</span><span>${fichaAtual[c.key]??(i<currentIndex?"—":"…")}</span>`; fichaList.appendChild(li);});
+}
+function startCategory(){ finalCard.classList.add("hidden"); const cat=CATEGORIAS[currentIndex]; categoriaTitulo.textContent=`Roleta — ${cat.key}`; drawWheel(cat.options); renderFicha(); }
+function nextCategory(){ if(currentIndex<CATEGORIAS.length-1){ currentIndex++; startCategory(); if(autoMode) setTimeout(()=>btnSpin.click(),500);}
+  else{ showFinalCard(); saveToHistory({...fichaAtual,__createdAt:Date.now()}); fireConfetti(); fichaAtual={}; currentIndex=0; startCategory(); }}
+function showFinalCard(){ finalCard.innerHTML=`<h3>✅ Personagem Gerado</h3><ul class="ficha">${CATEGORIAS.map(c=>`<li><span>${c.key}</span><span>${fichaAtual[c.key]}</span></li>`).join("")}</ul>`;
+  finalCard.classList.remove("hidden"); }
+
+/*******************
+ * MODO TORNEIO     *
+ *******************/
+const TOURNAMENT_SIZE=8; let tournamentPlayers=[], currentMatch=0;
+
+function generateCharacter(){
+  const char={}; CATEGORIAS.forEach(c=>char[c.key]=c.options[rand(0,c.options.length-1)]);
+  char.__createdAt=Date.now(); return char;
 }
 
-function startCategory(){
-  finalCard.classList.add("hidden");
-  const cat = CATEGORIAS[currentIndex];
-  categoriaTitulo.textContent = `Roleta — ${cat.key}`;
-  drawWheel(cat.options);
-  renderFicha();
+function startTournament(){
+  tournamentPlayers=Array.from({length:TOURNAMENT_SIZE},generateCharacter);
+  currentMatch=0; renderBracket(); resultDiv.innerHTML=""; btnNextMatch.disabled=false;
 }
 
-function nextCategory(){
-  if(currentIndex < CATEGORIAS.length - 1){
-    currentIndex++;
-    startCategory();
-    if(autoMode) setTimeout(()=>btnSpin.click(), 500);
-  } else {
-    // terminou personagem
-    showFinalCard();
-    saveToHistory({ ...fichaAtual, __createdAt: Date.now() });
-    fireConfetti();
-    // prepara próxima rodada
-    fichaAtual = {};
-    currentIndex = 0;
-    startCategory();
+function renderBracket(){
+  bracketDiv.innerHTML=""; for(let i=0;i<tournamentPlayers.length;i+=2){
+    const p1=tournamentPlayers[i], p2=tournamentPlayers[i+1];
+    const div=document.createElement("div"); div.className="match";
+    div.innerHTML=`<strong>${p1["Raça"]}</strong> vs <strong>${p2["Raça"]}</strong>`; bracketDiv.appendChild(div);
   }
 }
 
-function showFinalCard(){
-  finalCard.innerHTML = `<h3>✅ Personagem Gerado</h3>` +
-    `<ul class="ficha">` +
-    CATEGORIAS.map(c=>`<li><span>${c.key}</span><span>${fichaAtual[c.key]}</span></li>`).join("") +
-    `</ul>`;
-  finalCard.classList.remove("hidden");
+function nextMatch(){
+  if(currentMatch>=tournamentPlayers.length/2){ 
+    tournamentPlayers=tournamentPlayers.filter((_,i)=>i%2===0); 
+    currentMatch=0; 
+    if(tournamentPlayers.length===1){ endTournament(); return; }
+    renderBracket(); return;
+  }
+  const i=currentMatch*2, p1=tournamentPlayers[i], p2=tournamentPlayers[i+1];
+  const winner=Math.random()<0.5?p1:p2; tournamentPlayers[i]=winner;
+  resultDiv.innerHTML=`<p>🏅 ${p1["Raça"]} vs ${p2["Raça"]} → <strong>${winner["Raça"]}</strong> venceu!</p>`;
+  currentMatch++;
+}
+
+function endTournament(){
+  const champion=tournamentPlayers[0]; champion.__tournament=true; saveToHistory(champion);
+  resultDiv.innerHTML=`<h3>🏆 CAMPEÃO DO TORNEIO: ${champion["Raça"]}</h3>`; fireConfetti(); btnNextMatch.disabled=true;
 }
 
 /*******************
- * HISTÓRICO       *
+ * CONTROLES        *
  *******************/
-function loadHistory(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  }catch{ return []; }
-}
-function saveHistory(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-}
-function saveToHistory(char){
-  history = [char, ...history];
-  saveHistory();
-}
-function renderHistorico(){
-  histGrid.innerHTML = "";
-  if(history.length === 0){
-    histGrid.innerHTML = `<p class="hint">Nenhum personagem salvo ainda. Gere alguns na página da Roleta.</p>`;
-    return;
-  }
-  history.forEach((char, i)=>{
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <h4>Personagem #${history.length - i}</h4>
-      <time>${new Date(char.__createdAt).toLocaleString()}</time>
-      <ul>
-        ${Object.entries(char).filter(([k])=>!k.startsWith("__")).map(([k,v])=>`<li><strong>${k}:</strong> ${v}</li>`).join("")}
-      </ul>
-    `;
-    histGrid.appendChild(card);
-  });
-}
-btnExport.addEventListener("click", ()=>{
-  const blob = new Blob([JSON.stringify(history, null, 2)], {type:"application/json"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = `historico_personagens_${Date.now()}.json`;
-  document.body.appendChild(a); a.click(); a.remove();
-  URL.revokeObjectURL(url);
-});
-btnClear.addEventListener("click", ()=>{
-  if(confirm("Tem certeza que deseja limpar TODO o histórico?")){
-    history = []; saveHistory(); renderHistorico();
-  }
-});
-fileImport.addEventListener("change", (e)=>{
-  const f = e.target.files?.[0]; if(!f) return;
-  const reader = new FileReader();
-  reader.onload = ()=>{
-    try{
-      const data = JSON.parse(reader.result);
-      if(Array.isArray(data)){ history = data; saveHistory(); renderHistorico(); }
-      else alert("Arquivo inválido.");
-    }catch{ alert("Falha ao ler JSON."); }
-  };
-  reader.readAsText(f);
-});
+btnSpin.addEventListener("click",()=>{ if(spinning) return; const cat=CATEGORIAS[currentIndex];
+  spinOnce(cat.options,idx=>{ fichaAtual[cat.key]=cat.options[idx]; renderFicha(); setTimeout(nextCategory,650); }); });
+btnReset.addEventListener("click",()=>{ if(spinning) return; fichaAtual={}; currentIndex=0; startCategory(); finalCard.classList.add("hidden"); });
+autoToggle.addEventListener("change",e=>autoMode=e.target.checked);
+btnGenerateTournament.addEventListener("click",startTournament);
+btnNextMatch.addEventListener("click",nextMatch);
 
-/*******************
- * OPÇÕES          *
- *******************/
-function renderOpcoes(){
-  ordemList.innerHTML = CATEGORIAS.map(c=>`<li>${c.key}</li>`).join("");
-}
-btnShuffle.addEventListener("click", ()=>{
-  for(let i=CATEGORIAS.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [CATEGORIAS[i], CATEGORIAS[j]] = [CATEGORIAS[j], CATEGORIAS[i]];
-  }
-  renderOpcoes();
-  // se estiver na roleta, recomeça a sequência
-  if(viewRoleta.classList.contains("active")){
-    currentIndex = 0; fichaAtual = {}; startCategory();
-  }
-});
+btnExport.addEventListener("click",()=>{ const blob=new Blob([JSON.stringify(history,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=`historico_${Date.now()}.json`; a.click(); URL.revokeObjectURL(url);});
+btnClear.addEventListener("click",()=>{ if(confirm("Limpar histórico?")){ history=[]; saveHistory(); renderHistorico(); }});
+fileImport.addEventListener("change",e=>{const f=e.target.files?.[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{try{const d=JSON.parse(r.result); if(Array.isArray(d)){history=d; saveHistory(); renderHistorico();}else alert("Arquivo inválido.");}catch{alert("Erro lendo arquivo.");}}; r.readAsText(f);});
 
-/*******************
- * CONTROLES       *
- *******************/
-btnSpin.addEventListener("click", ()=>{
-  if(spinning) return;
-  const cat = CATEGORIAS[currentIndex];
-  spinOnce(cat.options, (idx)=>{
-    const val = cat.options[idx];
-    fichaAtual[cat.key] = val;
-    renderFicha();
-    setTimeout(nextCategory, 650);
-  });
-});
-btnReset.addEventListener("click", ()=>{
-  if(spinning) return;
-  fichaAtual = {}; currentIndex = 0; startCategory();
-  finalCard.classList.add("hidden");
-});
-autoToggle.addEventListener("change", (e)=>{ autoMode = e.target.checked; });
+btnShuffle.addEventListener("click",()=>{ for(let i=CATEGORIAS.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [CATEGORIAS[i],CATEGORIAS[j]]=[CATEGORIAS[j],CATEGORIAS[i]];}
+  renderOpcoes(); if(viewRoleta.classList.contains("active")){currentIndex=0; fichaAtual={}; startCategory();}});
+function renderOpcoes(){ ordemList.innerHTML=CATEGORIAS.map(c=>`<li>${c.key}</li>`).join(""); }
 
 /*******************
  * CONFETTI         *
  *******************/
 function fireConfetti(){
-  const W = confettiCanvas.width = window.innerWidth;
-  const H = confettiCanvas.height = window.innerHeight;
-  const N = 160;
-  const parts = Array.from({length:N}).map(()=>({
-    x: Math.random()*W, y: -20, r: rand(4,8),
-    c: ["#ffd54a","#7c3aed","#22c55e","#38bdf8","#ef4444"][rand(0,4)],
-    vx: (Math.random()-.5)*2, vy: rand(2,5), a: Math.random()*360, va: rand(-6,6)
-  }));
-  let t0 = performance.now(), dur = 2200;
-
-  function frame(now){
-    const t = now - t0;
-    cctx.clearRect(0,0,W,H);
-    parts.forEach(p=>{
-      p.x += p.vx; p.y += p.vy; p.a += p.va;
-      cctx.save();
-      cctx.translate(p.x, p.y);
-      cctx.rotate(p.a * Math.PI/180);
-      cctx.fillStyle = p.c;
-      cctx.fillRect(-p.r/2, -p.r/2, p.r, p.r);
-      cctx.restore();
-    });
-    if(t < dur) requestAnimationFrame(frame);
-    else cctx.clearRect(0,0,W,H);
-  }
-  requestAnimationFrame(frame);
-}
-
-/*******************
- * BOOT            *
- *******************/
-function boot(){
-  // rota inicial
-  showRoute("roleta");
-  // inicializa roleta
-  startCategory();
-  // primeira render do histórico/ops para já existir estrutura ao trocar
-  renderHistorico();
-  renderOpcoes();
-}
-/*******************
- * MODO TORNEIO    *
- *******************/
-
-// Número de participantes (tem que ser 4, 8, 16...)
-const TOURNAMENT_SIZE = 8;
-
-// Função para gerar um personagem aleatório
-function generateCharacter() {
-  const char = {};
-  CATEGORIAS.forEach(c => {
-    const opt = c.options[rand(0, c.options.length - 1)];
-    char[c.key] = opt;
-  });
-  char.__createdAt = Date.now();
-  return char;
-}
-
-// Inicia o torneio
-function startTournament() {
-  // Gera os participantes
-  let participants = Array.from({ length: TOURNAMENT_SIZE }, generateCharacter);
-
-  // Mostra bracket inicial
-  renderBracket(participants);
-
-  // Joga as rodadas
-  setTimeout(() => playRound(participants), 800);
-}
-
-// Simula uma rodada
-function playRound(participants) {
-  const winners = [];
-  for (let i = 0; i < participants.length; i += 2) {
-    const p1 = participants[i];
-    const p2 = participants[i + 1];
-
-    // Sorteia vencedor (no futuro pode usar Escala de Poder)
-    const winner = Math.random() < 0.5 ? p1 : p2;
-    winners.push(winner);
-  }
-
-  // Atualiza bracket
-  renderBracket(winners);
-
-  if (winners.length > 1) {
-    // Próxima rodada
-    setTimeout(() => playRound(winners), 1000);
-  } else {
-    // Final: mostra campeão
-    setTimeout(() => showTournamentWinner(winners[0]), 1200);
-  }
-}
-
-// Renderiza o bracket na tela
-function renderBracket(participants) {
-  const container = document.getElementById("tournament");
-  if (!container) return;
-
-  container.innerHTML = "<h3>🏆 Torneio</h3>";
-  participants.forEach((p, i) => {
-    const div = document.createElement("div");
-    div.className = "t-player";
-    div.innerHTML = `<strong>${p["Raça"]}</strong> - ${p["Poder"]}`;
-    container.appendChild(div);
-
-    if (i % 2 === 1) {
-      const hr = document.createElement("hr");
-      container.appendChild(hr);
-    }
-  });
-}
-
-// Mostra o campeão final
-function showTournamentWinner(champion) {
-  const container = document.getElementById("tournament");
-  if (!container) return;
-
-  container.innerHTML = `
-    <h3>🏆 CAMPEÃO DO TORNEIO 🏆</h3>
-    <p><strong>${champion["Raça"]}</strong> com o poder <em>${champion["Poder"]}</em> venceu!</p>
-  `;
-
-  // Salva no histórico
-  saveToHistory(champion);
-
-  // Confete pra comemorar
-  fireConfetti();
-}
-
-/*******************
- * BOTÃO TORNEIO    *
- *******************/
-const btnTournament = document.getElementById("btn-tournament");
-if (btnTournament) {
-  btnTournament.addEventListener("click", () => {
-    startTournament();
-  });
-}
-
-boot();
-
+  const W=confettiCanvas.width=window.innerWidth,H=confettiCanvas.height=window.innerHeight,N=160;
+  const parts=Array.from({length:N}).map(()=>({x:Math.random()*W,y:-20,r:rand(4,8),c:["#ffd54a","#7c3aed","#22c55e","#38bdf8","#ef4444"][rand(0,4)],vx:(Math.random()-.5)*2,vy:rand(2,5),a:Math.random()*360,va:rand(-6,6)}));
+  let t0=performance.now(),dur=2200;
+  function frame(now){const t=now-t0; cctx.clearRect(0,0,W,H); parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.a+=p.va;cctx.save();cctx.translate(p.x,p.y);cctx.rotate(p.a*Math.PI/180);cctx.fillStyle=p.c;cctx.fillRect(-p.r/2,-p.r/2,p.r,p.r);cctx.restore();}); if(t<dur)requestAnimationFrame(frame); else
