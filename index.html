@@ -14,13 +14,11 @@
     </div>
     <nav class="tabs">
       <button data-route="roleta" class="tab active">Roleta</button>
-      <button data-route="torneio" class="tab">Torneio</button>
       <button data-route="historico" class="tab">Histórico</button>
       <button data-route="opcoes" class="tab">Opções</button>
     </nav>
   </header>
 
-  <!-- Página da Roleta -->
   <main id="view-roleta" class="view active">
     <section class="panel wheel-panel">
       <div class="panel-head">
@@ -30,15 +28,19 @@
           <span>Auto (girar sequência)</span>
         </label>
       </div>
+
       <div class="wheel-wrap">
         <canvas id="wheel" width="520" height="520"></canvas>
+        <!-- Ponteiro fixo -->
         <div class="pointer"></div>
       </div>
+
       <div class="actions">
         <button id="btn-spin" class="btn primary">Girar</button>
         <button id="btn-reset" class="btn ghost">Resetar</button>
       </div>
     </section>
+
     <section class="panel sheet-panel">
       <h3>Ficha (parcial)</h3>
       <ul id="ficha-list" class="ficha"></ul>
@@ -47,20 +49,6 @@
     </section>
   </main>
 
-  <!-- Página do Torneio -->
-  <main id="view-torneio" class="view">
-    <section class="panel">
-      <h2>🏆 Torneio Épico</h2>
-      <div class="actions">
-        <button id="btn-generate-tournament" class="btn info">Gerar Torneio</button>
-        <button id="btn-next-match" class="btn primary" disabled>Próxima Luta</button>
-      </div>
-      <div id="tournament-bracket" class="tournament-bracket"></div>
-      <div id="tournament-result" class="tournament-result"></div>
-    </section>
-  </main>
-
-  <!-- Página do Histórico -->
   <main id="view-historico" class="view">
     <section class="panel">
       <div class="actions">
@@ -76,18 +64,23 @@
     </section>
   </main>
 
-  <!-- Página de Opções -->
   <main id="view-opcoes" class="view">
     <section class="panel">
       <h3>Opções do Sistema</h3>
       <p>Ordem atual das categorias (clique para embaralhar):</p>
       <ol id="ordem-list" class="ordem"></ol>
       <button id="btn-shuffle" class="btn violet">Embaralhar ordem</button>
+      <p class="hint">Futuro: pesos por opção, editor visual de listas, temas, presets…</p>
     </section>
   </main>
 
+  <!-- Confete -->
   <canvas id="confetti" class="confetti"></canvas>
-  <footer class="footer">Feito para girar a sorte, moldar o destino e contar histórias épicas. ✨</footer>
+
+  <footer class="footer">
+    Feito para girar a sorte, moldar o destino e contar histórias épicas. ✨
+  </footer>
+
   <script src="script.js"></script>
 </body>
 </html>
