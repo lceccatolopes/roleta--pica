@@ -14,11 +14,13 @@
     </div>
     <nav class="tabs">
       <button data-route="roleta" class="tab active">Roleta</button>
+      <button data-route="torneio" class="tab">Torneio</button>
       <button data-route="historico" class="tab">Histórico</button>
       <button data-route="opcoes" class="tab">Opções</button>
     </nav>
   </header>
 
+  <!-- ===== Página da Roleta ===== -->
   <main id="view-roleta" class="view active">
     <section class="panel wheel-panel">
       <div class="panel-head">
@@ -31,16 +33,13 @@
 
       <div class="wheel-wrap">
         <canvas id="wheel" width="520" height="520"></canvas>
-        <!-- Ponteiro fixo -->
         <div class="pointer"></div>
       </div>
 
       <div class="actions">
         <button id="btn-spin" class="btn primary">Girar</button>
         <button id="btn-reset" class="btn ghost">Resetar</button>
-        <button id="btn-tournament" class="btn special">Modo Torneio</button>
       </div>
-      <div id="tournament" class="tournament-area"></div>
     </section>
 
     <section class="panel sheet-panel">
@@ -51,6 +50,20 @@
     </section>
   </main>
 
+  <!-- ===== Página do Torneio ===== -->
+  <main id="view-torneio" class="view">
+    <section class="panel">
+      <h2>🏆 Torneio Épico</h2>
+      <div class="tournament-toolbar">
+        <button id="btn-generate-tournament" class="btn info">Gerar Participantes</button>
+        <button id="btn-next-match" class="btn primary" disabled>Próxima Luta</button>
+      </div>
+      <div id="tournament-bracket" class="tournament-bracket"></div>
+      <div id="tournament-result" class="tournament-result"></div>
+    </section>
+  </main>
+
+  <!-- ===== Página do Histórico ===== -->
   <main id="view-historico" class="view">
     <section class="panel">
       <div class="actions">
@@ -66,6 +79,7 @@
     </section>
   </main>
 
+  <!-- ===== Página de Opções ===== -->
   <main id="view-opcoes" class="view">
     <section class="panel">
       <h3>Opções do Sistema</h3>
@@ -86,5 +100,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
