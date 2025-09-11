@@ -84,7 +84,7 @@ let autoMode = false;             // gira sequência sozinho?
  * ELEMENTOS       *
  *******************/
 const wheel = $("#wheel");
-const wctx  = wheel.getContext("2d");
+const wctx  = wheel?.getContext("2d");
 const confettiCanvas = $("#confetti");
 const cctx = confettiCanvas.getContext("2d");
 
@@ -99,14 +99,23 @@ const tabButtons = $$(".tab");
 const viewRoleta = $("#view-roleta");
 const viewHistorico = $("#view-historico");
 const viewOpcoes = $("#view-opcoes");
+const viewTorneio = $("#view-torneio");
 
+// Histórico
 const histGrid = $("#hist-grid");
 const btnExport = $("#btn-export");
 const btnClear = $("#btn-clear");
 const fileImport = $("#file-import");
 
+// Opções
 const ordemList = $("#ordem-list");
 const btnShuffle = $("#btn-shuffle");
+
+// Torneio (página separada)
+const btnGenerateTournament = $("#btn-generate-tournament");
+const btnNextMatch = $("#btn-next-match");
+const bracketDiv = $("#tournament-bracket");
+const resultDiv = $("#tournament-result");
 
 /*******************
  * NAVEGAÇÃO       *
@@ -120,8 +129,9 @@ tabButtons.forEach(btn=>{
   });
 });
 function showRoute(route){
-  [viewRoleta, viewHistorico, viewOpcoes].forEach(v=>v.classList.remove("active"));
-  if(route==="roleta"){ viewRoleta.classList.add("active"); }
+  [viewRoleta, viewHistorico, viewOpcoes, viewTorneio].forEach(v=>v?.classList.remove("active"));
+  if(route==="roleta") viewRoleta.classList.add("active");
+  if(route==="torneio") viewTorneio.classList.add("active");
   if(route==="historico"){ viewHistorico.classList.add("active"); renderHistorico(); }
   if(route==="opcoes"){ viewOpcoes.classList.add("active"); renderOpcoes(); }
 }
@@ -131,6 +141,7 @@ function showRoute(route){
  *******************/
 let angle = 0; // ângulo atual (graus)
 function drawWheel(options){
+  if(!wctx) return;
   const size = wheel.width;
   const cx = size/2, cy = size/2;
   const outer = size/2 - 10;
@@ -235,7 +246,6 @@ function spinOnce(options, onEnd){
       drawWheel(options);
 
       // índice selecionado: pointer está no topo ( -90° )
-      // ajuste: transformar ângulo para posição relativa ao topo
       const pos = (angle + 90) % 360;         // o que está sob o ponteiro
       const index = Math.floor((360 - pos) / step) % n;
 
@@ -266,6 +276,7 @@ function renderFicha(){
 }
 
 function startCategory(){
+  if(!viewRoleta?.classList.contains("active")) return; // evita desenhar se estiver em outra página
   finalCard.classList.add("hidden");
   const cat = CATEGORIAS[currentIndex];
   categoriaTitulo.textContent = `Roleta — ${cat.key}`;
@@ -315,16 +326,18 @@ function saveToHistory(char){
   saveHistory();
 }
 function renderHistorico(){
+  if(!histGrid) return;
   histGrid.innerHTML = "";
   if(history.length === 0){
     histGrid.innerHTML = `<p class="hint">Nenhum personagem salvo ainda. Gere alguns na página da Roleta.</p>`;
     return;
   }
   history.forEach((char, i)=>{
+    const isChampion = !!char.__tournament;
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `
-      <h4>Personagem #${history.length - i}</h4>
+      <h4>${isChampion ? "Campeão do Torneio" : "Personagem"} #${history.length - i}</h4>
       <time>${new Date(char.__createdAt).toLocaleString()}</time>
       <ul>
         ${Object.entries(char).filter(([k])=>!k.startsWith("__")).map(([k,v])=>`<li><strong>${k}:</strong> ${v}</li>`).join("")}
@@ -333,7 +346,140 @@ function renderHistorico(){
     histGrid.appendChild(card);
   });
 }
-btnExport.addEventListener("click", ()=>{
+
+/*******************
+ * OPÇÕES          *
+ *******************/
+function renderOpcoes(){
+  if(!ordemList) return;
+  ordemList.innerHTML = CATEGORIAS.map(c=>`<li>${c.key}</li>`).join("");
+}
+
+/*******************
+ * CONTROLES (Roleta)
+ *******************/
+btnSpin?.addEventListener("click", ()=>{
+  if(spinning) return;
+  const cat = CATEGORIAS[currentIndex];
+  spinOnce(cat.options, (idx)=>{
+    const val = cat.options[idx];
+    fichaAtual[cat.key] = val;
+    renderFicha();
+    setTimeout(nextCategory, 650);
+  });
+});
+btnReset?.addEventListener("click", ()=>{
+  if(spinning) return;
+  fichaAtual = {}; currentIndex = 0; startCategory();
+  finalCard.classList.add("hidden");
+});
+autoToggle?.addEventListener("change", (e)=>{ autoMode = e.target.checked; });
+
+/*******************
+ * MODO TORNEIO (manual)
+ *******************/
+const TOURNAMENT_SIZE = 8;
+let tPlayers = [];        // participantes da fase atual (array)
+let tRoundPairs = [];     // pares da rodada atual [ [p1,p2], [p3,p4], ... ]
+let tPairIndex = 0;       // qual par está lutando agora (manual)
+
+function generateCharacter(){
+  const char = {};
+  CATEGORIAS.forEach(c => {
+    const opt = c.options[rand(0, c.options.length - 1)];
+    char[c.key] = opt;
+  });
+  char.__createdAt = Date.now();
+  return char;
+}
+
+function startTournament(){
+  // cria 8 participantes aleatórios
+  tPlayers = Array.from({length: TOURNAMENT_SIZE}, generateCharacter);
+  startRound();
+  resultDiv.textContent = "";
+  btnNextMatch.disabled = false;
+}
+
+function startRound(){
+  // forma os pares da rodada
+  tRoundPairs = [];
+  for(let i=0;i<tPlayers.length;i+=2){
+    tRoundPairs.push([tPlayers[i], tPlayers[i+1]]);
+  }
+  tPairIndex = 0;
+  renderBracket();
+  highlightLiveMatch();
+}
+
+function highlightLiveMatch(){
+  const nodes = bracketDiv.querySelectorAll(".match");
+  nodes.forEach(n=>n.classList.remove("live"));
+  if(nodes[tPairIndex]) nodes[tPairIndex].classList.add("live");
+}
+
+function renderBracket(){
+  if(!bracketDiv) return;
+  bracketDiv.innerHTML = "";
+  tRoundPairs.forEach((pair, idx)=>{
+    const [p1,p2] = pair;
+    const div = document.createElement("div");
+    div.className = "match";
+    div.innerHTML = `
+      <div class="pair">
+        <span class="badge">Duelo ${idx+1}</span>
+        <span class="name">${p1["Raça"]} <span class="x">vs</span> ${p2["Raça"]}</span>
+      </div>
+    `;
+    bracketDiv.appendChild(div);
+  });
+}
+
+function nextMatch(){
+  // se já não há pares, inicia próxima rodada ou finaliza
+  if(tPairIndex >= tRoundPairs.length){
+    // próximos participantes são os vencedores que ficaram nas posições pares (0,2,4...)
+    // (porque ao salvar vencedor, colocamos no lugar do primeiro do par)
+    tPlayers = tPlayers.filter((_,i)=> i%2===0);
+    if(tPlayers.length === 1){
+      // campeão
+      const champion = tPlayers[0];
+      champion.__tournament = true;
+      saveToHistory(champion);
+      resultDiv.innerHTML = `<h3>🏆 CAMPEÃO DO TORNEIO: ${champion["Raça"]}</h3>`;
+      fireConfetti();
+      btnNextMatch.disabled = true;
+      return;
+    }
+    // nova rodada
+    startRound();
+    return;
+  }
+
+  // luta do par atual
+  const i = tPairIndex*2;
+  const [p1, p2] = tRoundPairs[tPairIndex];
+
+  const winner = Math.random() < 0.5 ? p1 : p2;
+  // coloca o vencedor no array tPlayers, posição do primeiro do par
+  tPlayers[i] = winner;
+
+  resultDiv.innerHTML = `🏅 <strong>${p1["Raça"]}</strong> vs <strong>${p2["Raça"]}</strong> → <strong>${winner["Raça"]}</strong> venceu!`;
+
+  tPairIndex++;
+  highlightLiveMatch();
+}
+
+/*******************
+ * CONTROLES (Torneio)
+ *******************/
+btnGenerateTournament?.addEventListener("click", startTournament);
+btnNextMatch?.addEventListener("click", nextMatch);
+
+/*******************
+ * EXPORT / IMPORT / OPÇÕES
+ *******************/
+btnExport?.addEventListener("click", ()=>{
   const blob = new Blob([JSON.stringify(history, null, 2)], {type:"application/json"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -341,12 +487,12 @@ btnExport.addEventListener("click", ()=>{
   document.body.appendChild(a); a.click(); a.remove();
   URL.revokeObjectURL(url);
 });
-btnClear.addEventListener("click", ()=>{
+btnClear?.addEventListener("click", ()=>{
   if(confirm("Tem certeza que deseja limpar TODO o histórico?")){
     history = []; saveHistory(); renderHistorico();
   }
 });
-fileImport.addEventListener("change", (e)=>{
+fileImport?.addEventListener("change", (e)=>{
   const f = e.target.files?.[0]; if(!f) return;
   const reader = new FileReader();
   reader.onload = ()=>{
@@ -359,43 +505,16 @@ fileImport.addEventListener("change", (e)=>{
   reader.readAsText(f);
 });
 
-/*******************
- * OPÇÕES          *
- *******************/
-function renderOpcoes(){
-  ordemList.innerHTML = CATEGORIAS.map(c=>`<li>${c.key}</li>`).join("");
-}
-btnShuffle.addEventListener("click", ()=>{
+btnShuffle?.addEventListener("click", ()=>{
   for(let i=CATEGORIAS.length-1;i>0;i--){
     const j = Math.floor(Math.random()*(i+1));
     [CATEGORIAS[i], CATEGORIAS[j]] = [CATEGORIAS[j], CATEGORIAS[i]];
   }
   renderOpcoes();
-  // se estiver na roleta, recomeça a sequência
   if(viewRoleta.classList.contains("active")){
     currentIndex = 0; fichaAtual = {}; startCategory();
   }
 });
-
-/*******************
- * CONTROLES       *
- *******************/
-btnSpin.addEventListener("click", ()=>{
-  if(spinning) return;
-  const cat = CATEGORIAS[currentIndex];
-  spinOnce(cat.options, (idx)=>{
-    const val = cat.options[idx];
-    fichaAtual[cat.key] = val;
-    renderFicha();
-    setTimeout(nextCategory, 650);
-  });
-});
-btnReset.addEventListener("click", ()=>{
-  if(spinning) return;
-  fichaAtual = {}; currentIndex = 0; startCategory();
-  finalCard.classList.add("hidden");
-});
-autoToggle.addEventListener("change", (e)=>{ autoMode = e.target.checked; });
 
 /*******************
  * CONFETTI         *
@@ -435,111 +554,10 @@ function fireConfetti(){
 function boot(){
   // rota inicial
   showRoute("roleta");
-  // inicializa roleta
+  // inicializa roleta (somente se a página da roleta estiver ativa)
   startCategory();
-  // primeira render do histórico/ops para já existir estrutura ao trocar
+  // renderiza páginas auxiliares
   renderHistorico();
   renderOpcoes();
 }
-/*******************
- * MODO TORNEIO    *
- *******************/
-
-// Número de participantes (tem que ser 4, 8, 16...)
-const TOURNAMENT_SIZE = 8;
-
-// Função para gerar um personagem aleatório
-function generateCharacter() {
-  const char = {};
-  CATEGORIAS.forEach(c => {
-    const opt = c.options[rand(0, c.options.length - 1)];
-    char[c.key] = opt;
-  });
-  char.__createdAt = Date.now();
-  return char;
-}
-
-// Inicia o torneio
-function startTournament() {
-  // Gera os participantes
-  let participants = Array.from({ length: TOURNAMENT_SIZE }, generateCharacter);
-
-  // Mostra bracket inicial
-  renderBracket(participants);
-
-  // Joga as rodadas
-  setTimeout(() => playRound(participants), 800);
-}
-
-// Simula uma rodada
-function playRound(participants) {
-  const winners = [];
-  for (let i = 0; i < participants.length; i += 2) {
-    const p1 = participants[i];
-    const p2 = participants[i + 1];
-
-    // Sorteia vencedor (no futuro pode usar Escala de Poder)
-    const winner = Math.random() < 0.5 ? p1 : p2;
-    winners.push(winner);
-  }
-
-  // Atualiza bracket
-  renderBracket(winners);
-
-  if (winners.length > 1) {
-    // Próxima rodada
-    setTimeout(() => playRound(winners), 1000);
-  } else {
-    // Final: mostra campeão
-    setTimeout(() => showTournamentWinner(winners[0]), 1200);
-  }
-}
-
-// Renderiza o bracket na tela
-function renderBracket(participants) {
-  const container = document.getElementById("tournament");
-  if (!container) return;
-
-  container.innerHTML = "<h3>🏆 Torneio</h3>";
-  participants.forEach((p, i) => {
-    const div = document.createElement("div");
-    div.className = "t-player";
-    div.innerHTML = `<strong>${p["Raça"]}</strong> - ${p["Poder"]}`;
-    container.appendChild(div);
-
-    if (i % 2 === 1) {
-      const hr = document.createElement("hr");
-      container.appendChild(hr);
-    }
-  });
-}
-
-// Mostra o campeão final
-function showTournamentWinner(champion) {
-  const container = document.getElementById("tournament");
-  if (!container) return;
-
-  container.innerHTML = `
-    <h3>🏆 CAMPEÃO DO TORNEIO 🏆</h3>
-    <p><strong>${champion["Raça"]}</strong> com o poder <em>${champion["Poder"]}</em> venceu!</p>
-  `;
-
-  // Salva no histórico
-  saveToHistory(champion);
-
-  // Confete pra comemorar
-  fireConfetti();
-}
-
-/*******************
- * BOTÃO TORNEIO    *
- *******************/
-const btnTournament = document.getElementById("btn-tournament");
-if (btnTournament) {
-  btnTournament.addEventListener("click", () => {
-    startTournament();
-  });
-}
-
 boot();
-
