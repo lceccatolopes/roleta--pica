@@ -111,3 +111,33 @@ h2,h3{margin:0 0 10px 0}
 .footer{opacity:.65; text-align:center; padding:22px; border-top:1px solid var(--border); margin-top:14px}
 
 .confetti{position:fixed; inset:0; pointer-events:none}
+
+/* ===== Torneio (página separada) ===== */
+.tournament-toolbar{display:flex; gap:10px; justify-content:center; margin-top:6px}
+.tournament-bracket{
+  margin-top:18px;
+  display:grid;
+  gap:10px;
+}
+.match{
+  border:1px solid var(--border);
+  background:#0d162f;
+  border-radius:10px;
+  padding:10px 12px;
+}
+.match .pair{display:flex; align-items:center; justify-content:space-between; gap:8px}
+.badge{font-size:12px; color:#111; background:var(--violet); padding:2px 8px; border-radius:999px}
+.match.live{border-color:var(--primary); box-shadow:0 0 0 2px #ffd54a30 inset}
+.match .name{font-weight:700}
+.match .x{opacity:.6}
+
+.tournament-result{
+  margin-top:16px;
+  text-align:center;
+  font-weight:700;
+  color:var(--primary);
+  min-height:28px;
+}
+
+/* botão “special” que você usou antes */
+.btn.special{ background: var(--violet); color:#111 }
