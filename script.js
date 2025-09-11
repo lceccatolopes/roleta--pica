@@ -93,6 +93,7 @@ const fichaList = $("#ficha-list");
 const finalCard = $("#final-card");
 const btnSpin = $("#btn-spin");
 const btnReset = $("#btn-reset");
+const btnNew = $("#btn-new"); // <-- NOVO
 const autoToggle = $("#autoToggle");
 
 const tabButtons = $$(".tab");
@@ -392,9 +393,27 @@ btnSpin.addEventListener("click", ()=>{
 });
 btnReset.addEventListener("click", ()=>{
   if(spinning) return;
-  fichaAtual = {}; currentIndex = 0; startCategory();
+  fichaAtual = {}; currentIndex = 0; angle = 0; // reset ângulo também
+  startCategory();
   finalCard.classList.add("hidden");
 });
+
+// ===== NOVO PERSONAGEM =====
+function handleNewCharacter(){
+  if (spinning) return;
+  fichaAtual = {};
+  currentIndex = 0;
+  angle = 0; // zera a orientação da roleta
+  finalCard.classList.add("hidden");
+  startCategory();
+}
+// se o botão existir, liga direto
+if (btnNew) btnNew.addEventListener("click", handleNewCharacter);
+// fallback: delegação (funciona mesmo se o botão for renderizado depois)
+document.addEventListener("click", (e)=>{
+  if (e.target && e.target.id === "btn-new") handleNewCharacter();
+});
+
 autoToggle.addEventListener("change", (e)=>{ autoMode = e.target.checked; });
 
 /*******************
