@@ -549,6 +549,107 @@ function fireConfetti(){
 }
 
 /*******************
+ * BIBLIOTECA
+ *******************/
+let biblioteca = JSON.parse(localStorage.getItem("biblioteca")) || [];
+let editIndex = null;
+
+const viewBiblioteca = $("#view-biblioteca");
+const libraryGrid = $("#library-grid");
+const btnAddCharacter = $("#btn-add-character");
+const modal = $("#modal");
+const modalTitle = $("#modal-title");
+const charName = $("#char-name");
+const charImage = $("#char-image");
+const charDesc = $("#char-desc");
+const btnSaveCharacter = $("#btn-save-character");
+const btnCancel = $("#btn-cancel");
+
+function renderBiblioteca() {
+  libraryGrid.innerHTML = "";
+  if (biblioteca.length === 0) {
+    libraryGrid.innerHTML = `<p class="hint">Nenhum personagem na biblioteca.</p>`;
+    return;
+  }
+  biblioteca.forEach((char, i) => {
+    const card = document.createElement("div");
+    card.className = "library-card";
+    card.innerHTML = `
+      <img src="${char.image || "https://via.placeholder.com/150"}" alt="${char.name}">
+      <h4>${char.name}</h4>
+      <p>${char.desc || ""}</p>
+      <div class="actions">
+        <button class="btn info" onclick="editCharacter(${i})">Editar</button>
+        <button class="btn danger" onclick="deleteCharacter(${i})">Excluir</button>
+      </div>
+    `;
+    libraryGrid.appendChild(card);
+  });
+}
+
+function openModal(edit=false) {
+  modal.classList.remove("hidden");
+  if (!edit) {
+    modalTitle.textContent = "Novo Personagem";
+    charName.value = "";
+    charImage.value = "";
+    charDesc.value = "";
+    editIndex = null;
+  } else {
+    modalTitle.textContent = "Editar Personagem";
+  }
+}
+
+function closeModal() {
+  modal.classList.add("hidden");
+}
+
+function saveCharacter() {
+  const char = {
+    name: charName.value,
+    image: charImage.value,
+    desc: charDesc.value
+  };
+  if (editIndex !== null) {
+    biblioteca[editIndex] = char;
+  } else {
+    biblioteca.push(char);
+  }
+  localStorage.setItem("biblioteca", JSON.stringify(biblioteca));
+  renderBiblioteca();
+  closeModal();
+}
+
+function editCharacter(i) {
+  editIndex = i;
+  charName.value = biblioteca[i].name;
+  charImage.value = biblioteca[i].image;
+  charDesc.value = biblioteca[i].desc;
+  openModal(true);
+}
+
+function deleteCharacter(i) {
+  if (confirm("Tem certeza que deseja excluir este personagem?")) {
+    biblioteca.splice(i, 1);
+    localStorage.setItem("biblioteca", JSON.stringify(biblioteca));
+    renderBiblioteca();
+  }
+}
+
+btnAddCharacter?.addEventListener("click", () => openModal());
+btnCancel?.addEventListener("click", closeModal);
+btnSaveCharacter?.addEventListener("click", saveCharacter);
+
+// Mostrar biblioteca ao abrir aba
+tabButtons.forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    if (btn.dataset.route === "biblioteca") {
+      renderBiblioteca();
+    }
+  });
+});
+
+/*******************
  * BOOT            *
  *******************/
 function boot(){
@@ -561,3 +662,4 @@ function boot(){
   renderOpcoes();
 }
 boot();
+
