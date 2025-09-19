@@ -71,9 +71,23 @@
       <div class="actions">
         <button id="btn-add-character" class="btn success">Novo Personagem</button>
       </div>
-      <div id="library-grid" class="library-grid"></div>
+      <div id="library-grid" class="hist-grid"></div>
     </section>
   </main>
+  
+  <!-- ===== Modal Biblioteca ===== -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <h3 id="modal-title">Novo Personagem</h3>
+      <label>Nome: <input id="char-name" type="text"></label>
+      <label>Imagem (URL): <input id="char-image" type="text"></label>
+      <label>Descrição: <textarea id="char-desc"></textarea></label>
+      <div class="modal-actions">
+        <button id="btn-save-character" class="btn success">Salvar</button>
+        <button id="btn-cancel" class="btn danger">Cancelar</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ===== Página do Histórico ===== -->
   <main id="view-historico" class="view">
@@ -125,4 +139,5 @@
   </div> 
 </body>
 </html>
+
 
