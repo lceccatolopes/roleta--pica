@@ -554,16 +554,16 @@ function fireConfetti(){
 let biblioteca = JSON.parse(localStorage.getItem("biblioteca")) || [];
 let editIndex = null;
 
-const viewBiblioteca = $("#view-biblioteca");
-const libraryGrid = $("#library-grid");
-const btnAddCharacter = $("#btn-add-character");
-const modal = $("#modal");
-const modalTitle = $("#modal-title");
-const charName = $("#char-name");
-const charImage = $("#char-image");
-const charDesc = $("#char-desc");
-const btnSaveCharacter = $("#btn-save-character");
-const btnCancel = $("#btn-cancel");
+const viewBiblioteca = document.querySelector("#view-biblioteca");
+const libraryGrid = document.querySelector("#library-grid");
+const btnAddCharacter = document.querySelector("#btn-add-character");
+const modal = document.querySelector("#modal");
+const modalTitle = document.querySelector("#modal-title");
+const charName = document.querySelector("#char-name");
+const charImage = document.querySelector("#char-image");
+const charDesc = document.querySelector("#char-desc");
+const btnSaveCharacter = document.querySelector("#btn-save-character");
+const btnCancel = document.querySelector("#btn-cancel");
 
 function renderBiblioteca() {
   libraryGrid.innerHTML = "";
@@ -600,9 +600,7 @@ function openModal(edit=false) {
   }
 }
 
-function closeModal() {
-  modal.classList.add("hidden");
-}
+function closeModal() { modal.classList.add("hidden"); }
 
 function saveCharacter() {
   const char = {
@@ -640,6 +638,7 @@ btnAddCharacter?.addEventListener("click", () => openModal());
 btnCancel?.addEventListener("click", closeModal);
 btnSaveCharacter?.addEventListener("click", saveCharacter);
 
+
 // Mostrar biblioteca ao abrir aba
 tabButtons.forEach(btn=>{
   btn.addEventListener("click", ()=>{
@@ -662,4 +661,5 @@ function boot(){
   renderOpcoes();
 }
 boot();
+
 
